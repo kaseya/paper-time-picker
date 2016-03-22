@@ -179,7 +179,7 @@
           animate = typeof(animate) === 'undefined' ? this.animated : animate;
           animate = this._radius ? animate : false;
 
-          this.$.clock.classList.remove('animating');
+          this._removeFromClassList(this.$.clock, 'animating');
 
           var current, transform = this.$.clockHand.style.transform;
           if (transform) {
@@ -201,11 +201,11 @@
             if (callback) {
               callback();
             }
-            this.$.clock.classList.remove('animating');
+            this._removeFromClassList(this.$.clock, 'animating');
             this.fire('paper-clock-transition-end');
           }.bind(this), this.$.clockHand);
 
-          this.$.clock.classList.add('animating');
+          this._addToClassList(this.$.clock, 'animating');
           this.async(function() {
             this._setHandRotation(rotate);
           });
@@ -214,7 +214,7 @@
         _setHandRotation: function(deg) {
           var hasLabel = ((deg / 360) * this.count) % this.step === 0 ;
           var transform = 'rotate(' + deg + 'deg)';
-          this.$.clockHand.classList[['remove', 'add'][+hasLabel]]('no-dot');
+          this[['_removeFromClassList', '_addToClassList'][+hasLabel]](this.$.clockHand, 'no-dot');
           this.$.clockHand.style.transform = transform;
           this.$.clipCircle.style.transform = transform;
         },
@@ -301,27 +301,19 @@
         _createNumberElement: function(number) {
           // We can't use templates inside SVG elements, so we have to create
           // the numbers in dom and set up attribute bindings manually
-          function create(type, classList) {
-            function addToClassList(elem, clazz) {
-              if (elem.classList) {
-                elem.classList.add(clazz);
-              } else {
-                var c = elem.getAttribute('class') || '';
-                elem.setAttribute('class', c + (c ? ' ' : '') + clazz);
-              }
-            }
+          var create = function(type, classList) {
             var el = document.createElementNS(SVG_NS, type);
             if (classList) {
               classList.forEach(function(c) {
-                addToClassList(el, c);
-              });
+                this._addToClassList(el, c);
+              }.bind(this));
             }
             if (!Polymer.Settings.useNativeShadow) {
-              addToClassList(el, 'style-scope');
-              addToClassList(el, 'paper-clock-selector');
+              this._addToClassList(el, 'style-scope');
+              this._addToClassList(el, 'paper-clock-selector');
             }
             return el;
-          }
+          }.bind(this);
 
           var g = create('g', ['number']);
           var text = null;
@@ -459,7 +451,23 @@
             callback.apply(null, arguments);
           }
           node.addEventListener(eventName, onceCallback);
-        }
+        },
+        _addToClassList: function(elem, clazz) {
+          if (elem.classList) {
+            elem.classList.add(clazz);
+          } else {
+            var c = elem.getAttribute('class') || '';
+            elem.setAttribute('class', c + (c ? ' ' : '') + clazz);
+          }
+        },
+        _removeFromClassList: function(elem, clazz) {
+          if (elem.classList) {
+            elem.classList.remove(clazz);
+          } else {
+            var c = elem.getAttribute('class') || '';
+            elem.setAttribute('class', c.replace(clazz, ''));
+          }
+        },
       });
     })();
   </script>
