@@ -302,15 +302,23 @@
           // We can't use templates inside SVG elements, so we have to create
           // the numbers in dom and set up attribute bindings manually
           function create(type, classList) {
+            function addToClassList(elem, clazz) {
+              if (elem.classList) {
+                elem.classList.add(clazz);
+              } else {
+                var c = elem.getAttribute('class') || '';
+                elem.setAttribute('class', c + (c ? ' ' : '') + clazz);
+              }
+            }
             var el = document.createElementNS(SVG_NS, type);
             if (classList) {
               classList.forEach(function(c) {
-                el.classList.add(c);
+                addToClassList(el, c);
               });
             }
             if (!Polymer.Settings.useNativeShadow) {
-              el.classList.add('style-scope');
-              el.classList.add('paper-clock-selector');
+              addToClassList(el, 'style-scope');
+              addToClassList(el, 'paper-clock-selector');
             }
             return el;
           }
