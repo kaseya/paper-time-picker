@@ -345,6 +345,7 @@ If you include this element as part of `paper-dialog`, use the class
         },
         parseTime: function(timeString) {
           var pattern = /^\s*(\d{1,2}):?(\d{2})(\s*([AaPp])\.?[Mm]\.?|[A-Z])?\s*$/;
+          timeString = timeString.replace(/[^ -~]+/g, "");
           var match = timeString.match(pattern);
           if (!match) {
             warn('Invalid time:', timeString);

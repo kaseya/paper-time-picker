@@ -183,7 +183,7 @@
 
           var current, transform = this.$.clockHand.style.transform;
           if (transform) {
-            current = parseInt(transform.match(/rotate\((-?\d+)deg\)/)[1]);
+            current = parseInt(transform.match(/rotate\((-?\d+)(\.\d*)?deg\)/)[1]);
           } else {
             current = 0;
           }
@@ -213,7 +213,7 @@
         },
         _setHandRotation: function(deg) {
           var hasLabel = ((deg / 360) * this.count) % this.step === 0 ;
-          var transform = 'rotate(' + deg + 'deg)';
+          var transform = 'rotate(' + Math.floor(deg) + 'deg)';
           this[['_removeFromClassList', '_addToClassList'][+hasLabel]](this.$.clockHand, 'no-dot');
           this.$.clockHand.style.transform = transform;
           this.$.clipCircle.style.transform = transform;
