@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bendavis78/paper-time-picker.git"
+    "url": "git+https://github.com/kaseya/paper-time-picker.git"
   },
   "keywords": [
     "web-component",
@@ -34,10 +34,9 @@
     "timepicker",
     "paper-time-picker"
   ],
-  "author": "Ben Davis <bendavis78@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bendavis78/paper-time-picker/issues"
+    "url": "https://github.com/kaseya/paper-time-picker/issues"
   },
-  "homepage": "https://github.com/bendavis78/paper-time-picker#readme"
+  "homepage": "https://github.com/kaseya/paper-time-picker#readme"
 }
